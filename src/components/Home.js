@@ -66,8 +66,6 @@ const Container = styled.main`
   display: block;
   padding: 0 calc(3.5vw + 5px);
   top: 61px;
-  background: url("/images/home-background.png") center center / cover
-      no-repeat fixed;
   &:after {
     background: url("/images/home-background.png") center center / cover
       no-repeat fixed;
