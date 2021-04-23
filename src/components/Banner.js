@@ -9,7 +9,7 @@ const Banner = (props) => {
     let settings = {
         dots: true,
         infinite: true,
-        speed: 500,
+        speed: 700,
         slidesToShow: 1,
         slidesToScroll: 1,
         lazyLoad: true, 

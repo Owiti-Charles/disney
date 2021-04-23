@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { auth, provider } from '../firebase/firebase';
 import {useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { selectUserName, selectUserEmail, selectUserPhoto, setUserLoginDetails, setSignOutState} from '../features/users/userSlice';
 
@@ -64,32 +65,33 @@ const Nav = (props) => {
                 
                 <>
                     <NavMenu>
-                        <a href= "/">
-                            <img src="/images/home-icon.svg" alt="Home"/>
-                            <span>HOME</span> 
-                        </a> 
-
-                        <a href= "/">
+                        <Link to="/home">
+                            <a>
+                                <img src="/images/home-icon.svg" alt="Home"/>
+                                <span>HOME</span> 
+                            </a> 
+                        </Link>
+                        <a>
                             <img src="/images/search-icon.svg" alt="SEARCH"/>
                             <span>SEARCH</span> 
                         </a> 
 
-                        <a href= "/watchlist">
+                        <a>
                             <img src="/images/watchlist-icon.svg" alt="WATCHLIST"/>
                             <span>WATCHLIST</span> 
                         </a> 
 
-                        <a href= "/original">
+                        <a>
                             <img src="/images/original-icon.svg" alt="ORIGINALS"/>
                             <span>ORIGINALS</span> 
                         </a> 
 
-                        <a href= "/movies">
+                        <a>
                             <img src="/images/movie-icon.svg" alt="MOVIE"/>
                             <span>MOVIES</span> 
                         </a> 
 
-                        <a href= "/series">
+                        <a>
                             <img src="/images/series-icon.svg" alt="SERIES"/>
                             <span>SERIES</span> 
                         </a> 
