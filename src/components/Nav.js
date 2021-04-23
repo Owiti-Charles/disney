@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { auth, provider } from '../firebase/firebase';
 import {useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { selectUserName, selectUserEmail, selectUserPhoto, setUserLoginDetails} from '../features/users/userSlice';
+import { selectUserName, selectUserEmail, selectUserPhoto, setUserLoginDetails, setSignOutState} from '../features/users/userSlice';
 
 const Nav = (props) => {
     const dispatch = useDispatch();
@@ -16,18 +16,29 @@ const Nav = (props) => {
         auth.onAuthStateChanged(async (user) => {
             if(user){
                 setUser(user);
-                history.push('/home'); 
+                history.push("/home"); 
             } 
         })
     }, [userName]);
 
      
     const handleAuth = () => {
-        auth.signInWithPopup(provider).then((result) => { 
-            setUser(result.user);
-        }).catch((error) => {
-            alert(error.message);
-        });
+        if (!userName){
+            auth.signInWithPopup(provider).then((result) => { 
+                setUser(result.user);
+            }).catch((error) => {
+                alert(error.message);
+            });
+        }
+        else if (userName) {
+            auth
+              .signOut()
+              .then(() => {
+                dispatch(setSignOutState());
+                history.push("/");
+              })
+              .catch((err) => alert(err.message));
+        }
     };
 
     const setUser = (user) => {
@@ -84,8 +95,14 @@ const Nav = (props) => {
                         </a> 
 
                     </NavMenu>
-
-                    <UserImage src={userPhoto} alt={userName}/>
+                    <SignOut>
+                        <UserImage src={userPhoto} alt={userName}/>
+                        
+                        <DropDown>
+                            <span onClick={handleAuth}> Sign Out </span>
+                        </DropDown>
+                    </SignOut>
+                    
                 </>
             }
             
@@ -205,7 +222,39 @@ const Login = styled.a`
 
 const UserImage = styled.img`
     border-radius: 100%;
-    height: 100%; 
+    width: 100%;
 `;
+const DropDown = styled.div`
+    position: absolute;
+    top: 40px;
+    font-size: 12px;
+    right: 0;
+    padding: 10px;
+    background-color: rgb(19,19,19);
+    border:  1px solid rgba(151,151,151, 0.8);
+    border-radius: 4px;
+    opacity: 0;
+    width: 100px;
+    box-shadow: rgb(0 0 0 / 50%) 0px 0px 018px 0px;
+    letter-spacing: 2px; 
+    cursor:pointer;
+`;
+
+const SignOut = styled.div`
+    position: relative;
+    cursor: pointer;
+    align-atems: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    display: flex;  
+    &:hover{
+        ${DropDown}{
+            opacity: 1;
+            transition-duration: 1.5s;
+        }
+    }
+`;
+
 
 export default Nav;
