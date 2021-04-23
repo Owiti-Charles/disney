@@ -1,20 +1,13 @@
 import styled from 'styled-components';
 import React from 'react';
+import Banner from './Banner';
+import Group from './Group';
 
 const Home = (props) => {
     return(
         <Container> 
-            
-             
-             <h1>Helllo</h1>
-             <h1>Helllo</h1>
-             <h1>Helllo</h1>
-             <h1>Helllo</h1>
-             <h1>Helllo</h1>
-             <h1>Helllo</h1>
-             <h1>Helllo</h1>
-             <h1>Helllo</h1>
-             <h1>Helllo</h1>
+             <Banner/>
+             <Group/>
         </Container>
     );
 }
