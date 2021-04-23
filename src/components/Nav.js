@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { auth, provider } from '../firebase/firebase';
 import {useDispatch, useSelector } from 'react-redux';
@@ -11,6 +11,16 @@ const Nav = (props) => {
     const userName = useSelector(selectUserName);
     const userEmail = useSelector(selectUserEmail);
     const userPhoto = useSelector(selectUserPhoto);
+
+    useEffect(() => {
+        auth.onAuthStateChanged(async (user) => {
+            if(user){
+                setUser(user);
+                history.push('/home'); 
+            } 
+        })
+    }, [userName]);
+
      
     const handleAuth = () => {
         auth.signInWithPopup(provider).then((result) => { 
@@ -28,7 +38,7 @@ const Nav = (props) => {
                 photo: user.photoURL, 
         })
         );
-    }
+    };
      
     return (
         <NavBar> 
