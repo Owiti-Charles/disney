@@ -2,10 +2,16 @@ import styled from 'styled-components';
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import db from "../firebase/firebase";
+import YouTube from 'react-youtube';
+import movieTrailer from 'movie-trailer';
+import LoadingOverlay from 'react-loading-overlay-ts';
+
 
 const Detail = (props) => {
     const { id } = useParams();
     const [detailData, setDetail] = useState({});
+    const [trailerUrl, setTrailerUrl] = useState("");
+    const [isActive, setActive] = useState(false);
     useEffect(() => {
         db.collection("movies").doc(id).get().then((doc)=>{
             if(doc.exists){
@@ -17,38 +23,79 @@ const Detail = (props) => {
         }).catch((err) => {
             console.log("Error occured", err);
         });
-    },[id])
+    },[id]);
+    const opts = {
+        height: '500',
+        width: '100%',
+        playerVars: {
+          autoplay: 1,
+        },
+      };
+
+      const handleClick = (movie) => {
+        setActive(true);
+          if (trailerUrl){
+              setTrailerUrl('');
+              setActive(false);
+          }
+          else{
+              movieTrailer(movie?.title || "")
+              .then((url) =>{
+                  const urlParam = new URLSearchParams(new URL(url).search);
+                  setTrailerUrl(urlParam.get("v"));
+                  setActive(false);
+              }).catch((err) => console.log(err));
+          }
+      }
+
+      const handleExit = () => {
+        if (trailerUrl){
+            setTrailerUrl('');
+        }
+      }
     return (
         <Container>
+            
             <Background>
                 <img alt={detailData.title} src={detailData.backgroundImg} />
             </Background>
-            <ImageTitle>
-                <img alt={detailData.title} src={detailData.titleImg} />
-            </ImageTitle>
-            <ContentMeta>
-                <Controls>
-                  <Player>
-                    <img src="/images/play-icon-black.png" alt="" />
-                    <span>Play</span>
-                  </Player>
-                  <Trailer>
-                    <img src="/images/play-icon-white.png" alt="" />
-                    <span>Trailer</span>
-                  </Trailer>
-                  <AddList>
-                    <span />
-                    <span />
-                  </AddList>
-                  <GroupWatch>
-                    <div>
-                      <img src="/images/group-icon.png" alt="" />
-                    </div>
-                  </GroupWatch>
-                </Controls>
-                <SubTitle>{detailData.subTitle}</SubTitle>
-                <Description>{detailData.description}</Description>
-             </ContentMeta>
+            <MovieContent onClick={()=> handleExit()}>
+                <ContentDetail>
+                    <ImageTitle>
+                        <img alt={detailData.title} src={detailData.titleImg} />
+                    </ImageTitle>
+                    <ContentMeta>
+                        <Controls>
+                          <Player>
+                            <img src="/images/play-icon-black.png" alt="" />
+                            <span>Play</span>
+                          </Player>
+                          <Trailer onClick = {() => handleClick(detailData)}>
+                            <img src="/images/play-icon-white.png" alt="" />
+                            <span>Trailer</span>
+                          </Trailer>
+                          <AddList>
+                            <span />
+                            <span />
+                          </AddList>
+                          <GroupWatch>
+                            <div>
+                              <img src="/images/group-icon.png" alt="" />
+                            </div>
+                          </GroupWatch>
+                        </Controls>
+                        <SubTitle>{detailData.subTitle}</SubTitle>
+                        <Description>{detailData.description}</Description>
+                     </ContentMeta>
+                </ContentDetail>
+                
+                 <Movie>
+                
+                    {trailerUrl && <YouTube videoId={trailerUrl} opts={opts}/>}
+                
+                 </Movie>
+            </MovieContent>
+            
         </Container>
     );
 }
@@ -94,8 +141,31 @@ const ImageTitle = styled.div`
     }
 `;
 
+const MovieContent = styled.div`
+    display: grid;
+    grid-gap: 10px;
+    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+`;
+
+const ContentDetail = styled.div`
+
+`;
+
 const ContentMeta = styled.div`
-  max-width: 874px;
+    max-width: 874px;
+`;
+
+const Movie = styled.div`
+    margin-top: 30vh;
+    width: 100%;
+    @media (max-width: 768px) {
+        margin-top: 0;
+        padding-top: 5vh;
+      }
 `;
 
 const Controls = styled.div`

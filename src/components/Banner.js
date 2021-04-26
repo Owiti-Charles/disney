@@ -79,6 +79,7 @@ const Carousel = styled(Slider)`
     .slick-list{
         overflow: initial;
     }
+
 `;
 
 const Wrap = styled.div`
