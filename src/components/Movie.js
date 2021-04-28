@@ -1,18 +1,18 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { seriesList, }  from '../features/series/seriesSlice';
+import { movieList} from '../features/dbMovies/dbMovies'
 const image_url = "https://image.tmdb.org/t/p/original";
 
-const Serie = () => {
-  const movies = useSelector(seriesList);
+const Movie = () => {
+  const movies = useSelector(movieList);
     return (
         <Container>
             <h4>Popular TV Shows</h4>
             <Content>
                 {movies && movies.map((movie, key) => (
                 <Wrap key={key}>
-                    <Link to={`/series-detail/` + movie.id}>
+                    <Link to={`/movie-detail/` + movie.id}>
                             <img src={`${image_url}${movie.poster_path}`} alt={movie.name} />
                     </Link>
                  </Wrap>
@@ -68,4 +68,4 @@ const Wrap = styled.div`
     border-color: rgba(249, 249, 249, 0.8);
   }
 `;
-export default Serie; 
+export default Movie; 

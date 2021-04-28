@@ -6,6 +6,8 @@ import Home from './components/Home';
 import Detail from './components/Detail';
 import Series from './components/Series';
 import SeriesDetail from './components/SeriesDetail';
+import Movies from './components/Movies';
+import MovieDetail from './components/MovieDetail';
 
 
 function App() {
@@ -28,6 +30,12 @@ function App() {
           </Route>
           <Route exact path="/series-detail/:id">
               <SeriesDetail />
+          </Route>
+          <Route exact path="/movies/:selector">
+              <Movies />
+          </Route>
+          <Route exact path="/movie-detail/:id">
+              <MovieDetail />
           </Route>
         </Switch>
       </Router> 

@@ -1,17 +1,35 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { auth, provider } from '../firebase/firebase';
 import {useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { selectUserName, selectUserEmail, selectUserPhoto, setUserLoginDetails, setSignOutState} from '../features/users/userSlice';
+const options = [
+    {
+      label: "Popular",
+      value: "popular",
+    },
+    {
+      label: "Upcoming",
+      value: "upcoming",
+    },
+    {
+      label: "Now Playing",
+      value: "now_playing",
+    },
+    {
+      label: "Top Rated",
+      value: "top_rated",
+    },
+  ];
 
 const Nav = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const userName = useSelector(selectUserName);
-    const userEmail = useSelector(selectUserEmail);
     const userPhoto = useSelector(selectUserPhoto);
+    const [selector, setselector] = useState("");
 
     useEffect(() => {
         auth.onAuthStateChanged(async (user) => {
@@ -51,6 +69,16 @@ const Nav = (props) => {
         })
         );
     };
+
+    const handleClick = (option) =>{
+        if(selector){
+            setselector(""); 
+        }
+        else{
+            setselector(option);
+        }
+        
+    }
      
     return (
         <NavBar> 
@@ -84,13 +112,24 @@ const Nav = (props) => {
                         <a>
                             <img src="/images/original-icon.svg" alt="ORIGINALS"/>
                             <span>ORIGINALS</span> 
-                        </a> 
 
+                        </a> 
+                        
                         <a>
                             <img src="/images/movie-icon.svg" alt="MOVIE"/>
                             <span>MOVIES</span> 
-                        </a> 
+                            <Drop>
+                            {options.map((option) => (
+                                <Link to={`/movies/${option.value}`}>
+                                    <span>
+                                        <option value={option.value} onClick={()=> handleClick(option.value)}>{option.label}</option>
 
+                                    </span>
+                                </Link>
+                            ))}
+                            
+                            </Drop>
+                        </a> 
                         <Link to="/series">
                             <a>
                                 <img src="/images/series-icon.svg" alt="SERIES"/>
@@ -144,6 +183,28 @@ const Logo = styled.a`
     }
 `;
 
+const Drop = styled.div`
+    position: absolute;
+    top: 40px;
+    font-size: 12px;
+    right: 14%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(19,19,19);
+    border:  1px solid rgba(151,151,151, 0.8);
+    border-radius: 4px;
+    opacity: 0;
+    width: 130px;
+    box-shadow: rgb(0 0 0 / 50%) 0px 0px 018px 0px;
+    letter-spacing: 3px; 
+    cursor:pointer;
+    padding: 20px 10px 0px 10px;
+    
+    span{
+        margin-bottom: 10px;
+        
+    }
+`;
 const NavMenu = styled.div`
     display: flex;
     justify-content: flex-end;
@@ -159,14 +220,14 @@ const NavMenu = styled.div`
         display: flex; 
         align-items: center;
         padding: 0 12px; 
-
+        
         img{
             height: 20px;
             min-width: 20px;
             width: 20px;
             z-index: auto;
         }
-
+        
         span{ 
             color:rgb(249,249,249);
             font-size: 13px;
@@ -199,6 +260,14 @@ const NavMenu = styled.div`
                 transform: scaleX(1);
                 visibility: visible;
                 opacity: 1 !important;
+            }
+            ${Drop}{
+                opacity: 1;
+                transition-duration: 1.5s;
+                span:before{
+                    transform: scaleX(0);
+                    opacity: 0 !important;
+                }
             }
         }   
     }
