@@ -17,7 +17,7 @@ const Series = (props) => {
 
     useEffect(() => {
         async function fetchSeries (){
-            const request = await axios.get(`https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}`)
+            const request = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${apiKey}`)
             dispatch(setSeries({
                 seriesList:request.data.results
             })

@@ -5,6 +5,7 @@ import './App.css';
 import Home from './components/Home';
 import Detail from './components/Detail';
 import Series from './components/Series';
+import SeriesDetail from './components/SeriesDetail';
 
 
 function App() {
@@ -24,6 +25,9 @@ function App() {
           </Route>
           <Route exact path="/series">
               <Series/>
+          </Route>
+          <Route exact path="/series-detail/:id">
+              <SeriesDetail />
           </Route>
         </Switch>
       </Router> 
