@@ -4,6 +4,7 @@ import Nav from './components/Nav';
 import './App.css';
 import Home from './components/Home';
 import Detail from './components/Detail';
+import Series from './components/Series';
 
 
 function App() {
@@ -20,6 +21,9 @@ function App() {
           </Route>
           <Route exact path="/detail/:id">
               <Detail/>
+          </Route>
+          <Route exact path="/series">
+              <Series/>
           </Route>
         </Switch>
       </Router> 

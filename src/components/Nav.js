@@ -91,11 +91,12 @@ const Nav = (props) => {
                             <span>MOVIES</span> 
                         </a> 
 
-                        <a>
-                            <img src="/images/series-icon.svg" alt="SERIES"/>
-                            <span>SERIES</span> 
-                        </a> 
-
+                        <Link to="/series">
+                            <a>
+                                <img src="/images/series-icon.svg" alt="SERIES"/>
+                                <span>SERIES</span> 
+                            </a> 
+                        </Link>
                     </NavMenu>
                     <SignOut>
                         <UserImage src={userPhoto} alt={userName}/>
