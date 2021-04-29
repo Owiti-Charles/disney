@@ -61,7 +61,7 @@ const SeriesDetail = (props) => {
       }
     return (
         <Container>
-            
+
             <Background>
                 <img alt={detailData.name} src={`${image_url}${detailData.backdrop_path}`} />
             </Background>
