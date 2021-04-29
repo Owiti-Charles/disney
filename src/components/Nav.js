@@ -24,6 +24,25 @@ const options = [
     },
   ];
 
+  const optionsSeries = [
+    {
+      label: "Popular",
+      value: "popular",
+    },
+    {
+      label: "On TV",
+      value: "on_the_air",
+    },
+    {
+      label: "Airing Today",
+      value: "airing_today",
+    },
+    {
+      label: "Top Rated",
+      value: "top_rated",
+    },
+  ];
+
 const Nav = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
@@ -109,11 +128,6 @@ const Nav = (props) => {
                             <span>WATCHLIST</span> 
                         </a> 
 
-                        <a>
-                            <img src="/images/original-icon.svg" alt="ORIGINALS"/>
-                            <span>ORIGINALS</span> 
-
-                        </a> 
                         
                         <a>
                             <img src="/images/movie-icon.svg" alt="MOVIE"/>
@@ -130,12 +144,21 @@ const Nav = (props) => {
                             
                             </Drop>
                         </a> 
-                        <Link to="/series">
-                            <a>
-                                <img src="/images/series-icon.svg" alt="SERIES"/>
-                                <span>SERIES</span> 
-                            </a> 
-                        </Link>
+                        <a>
+                            <img src="/images/series-icon.svg" alt="SERIES"/>
+                            <span>SERIES</span> 
+                            <DropSeries>
+                            {optionsSeries.map((option) => (
+                                <Link to={`/series/${option.value}`}>
+                                    <span>
+                                        <option value={option.value}>{option.label}</option>
+
+                                    </span>
+                                </Link>
+                            ))}
+                            
+                            </DropSeries>
+                        </a> 
                     </NavMenu>
                     <SignOut>
                         <UserImage src={userPhoto} alt={userName}/>
@@ -205,6 +228,28 @@ const Drop = styled.div`
         
     }
 `;
+const DropSeries = styled.div`
+    position: absolute;
+    top: 40px;
+    font-size: 12px;
+    right: -4%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(19,19,19);
+    border:  1px solid rgba(151,151,151, 0.8);
+    border-radius: 4px;
+    opacity: 0;
+    width: 130px;
+    box-shadow: rgb(0 0 0 / 50%) 0px 0px 018px 0px;
+    letter-spacing: 3px; 
+    cursor:pointer;
+    padding: 20px 10px 0px 10px;
+    
+    span{
+        margin-bottom: 10px;
+        
+    }
+`;
 const NavMenu = styled.div`
     display: flex;
     justify-content: flex-end;
@@ -215,6 +260,7 @@ const NavMenu = styled.div`
     position: relative;
     margin-right: auto; 
     margin-left : 25px; 
+    cursor:pointer;
 
     a{
         display: flex; 
@@ -262,6 +308,14 @@ const NavMenu = styled.div`
                 opacity: 1 !important;
             }
             ${Drop}{
+                opacity: 1;
+                transition-duration: 1.5s;
+                span:before{
+                    transform: scaleX(0);
+                    opacity: 0 !important;
+                }
+            }
+            ${DropSeries}{
                 opacity: 1;
                 transition-duration: 1.5s;
                 span:before{

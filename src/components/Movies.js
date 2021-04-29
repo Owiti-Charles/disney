@@ -28,7 +28,7 @@ const Movies = (props) => {
     return (
         <Container>
             <Banner/>
-            <Movie/>
+            <Movie selector={selector}/>
         </Container>
     );
 

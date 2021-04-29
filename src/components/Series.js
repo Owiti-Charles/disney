@@ -6,29 +6,40 @@ import React, { useEffect, useState } from 'react';
 import  { selectUserName } from '../features/users/userSlice';
 import { setSeries } from '../features/series/seriesSlice';
 import Serie from './Serie';
-
+import { useParams } from "react-router-dom";
+import BounceLoader from "react-spinners/BounceLoader";
 
 const apiKey = "3398b411aabf78b7d423c667c60ee23f";
 
-
 const Series = (props) => {
+    let { selector } = useParams();
     let userName = useSelector(selectUserName);
-    const dispatch = useDispatch(); 
+    const dispatch = useDispatch();
+    const [loader, setLoader] = useState(true); 
 
     useEffect(() => {
         async function fetchSeries (){
-            const request = await axios.get(`https://api.themoviedb.org/3/tv/popular?api_key=${apiKey}`)
+            const request = await axios.get(`https://api.themoviedb.org/3/tv/${selector}?api_key=${apiKey}`)
+            setLoader(false);
             dispatch(setSeries({
                 seriesList:request.data.results
             })
             );
         }
         fetchSeries();
-    },[userName])
+    },[selector, userName])
     return (
         <Container>
             <Banner/>
-            <Serie/>
+            {loader ? 
+            <Spinner>
+                <BounceLoader color="#53CCF3" loading={loader} size={40} />
+            </Spinner>
+                
+            :
+            <Serie selector = {selector}/>
+            }
+            
         </Container>
     );
 
@@ -50,5 +61,12 @@ const Container = styled.main`
       opacity: 1;
       z-index: -1;
     }     
+`;
+const Spinner = styled.div`
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    
 `;
 export default Series;

@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux';
 import { movieList} from '../features/dbMovies/dbMovies'
 const image_url = "https://image.tmdb.org/t/p/original";
 
-const Movie = () => {
+const Movie = ({selector}) => {
   const movies = useSelector(movieList);
     return (
         <Container>
-            <h4>Popular TV Shows</h4>
+            { movies && <h4>{selector} TV Shows</h4>}
             <Content>
                 {movies && movies.map((movie, key) => (
                 <Wrap key={key}>
@@ -26,6 +26,9 @@ const Movie = () => {
 
 const Container = styled.div`
   padding: 0 0 26px;
+  h4{
+      text-transform: capitalize;
+  }
 `;
 
 const Content = styled.div`
