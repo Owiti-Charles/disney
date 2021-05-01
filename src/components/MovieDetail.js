@@ -23,11 +23,12 @@ const MovieDetail = (props) => {
     const [detailData, setDetail] = useState({});
     const [trailerData, setTrailerData] = useState({});
     const [trailerUrl, setTrailerUrl] = useState("");
+    const [year , setYear] = useState();
     useEffect(() => {
         async function fetchSeries(){
             const results = await axios.get(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}`);
             setDetail(results.data);
-            console.log(results.data);
+            setYear(new Date(results.data.release_date).getFullYear());
         }
         async function getTrailer(){
             const results = await axios.get(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${apiKey}`);
@@ -69,7 +70,16 @@ const MovieDetail = (props) => {
             <MovieContent onClick={()=> handleExit()}>
                 <ContentDetail>
                     <ImageTitle>
-                        <h1>{detailData?.title || detailData?.original_name || detailData?.name} </h1>
+                        <h1>
+                            <Title>
+                                {detailData?.title || detailData?.original_name || detailData?.name} 
+                               
+                                <span>{detailData?.tagline}</span>
+                            
+                            </Title>
+                            {year && <p>({ year})</p>}
+                            
+                        </h1>
                     </ImageTitle>
                     <ContentMeta>
                         <Controls>
@@ -92,6 +102,8 @@ const MovieDetail = (props) => {
                           </GroupWatch>
                         </Controls>
                         <SubTitles>
+                            <DateCast>{detailData?.release_date}</DateCast>
+                            <Dot>.</Dot>
                             {detailData.genres && detailData.genres.map((genre, key) => (
                                 <SubTitle>{genre.name},</SubTitle>
                                 
@@ -148,17 +160,53 @@ const ImageTitle = styled.div`
     justify-content: flex-start;
     margin: 0px auto;
     height: 30vw;
-    min-height: 170px;
-    padding-bottom: 14px;
+    min-height: 200px;
+    padding-bottom: 4px;
     width: 100%;
+    @media (max-width: 768px) {
+        min-height: 250px;
+        margin-bottom: 0px;
+    }
+    @media screen and (min-device-width: 1100px) and (max-device-width: 1600px) { 
+        height: 35vw;
+        min-height: 300px;
+    }
     h1 {
         font-size: 8vh;
-        max-width: 600px;
+        max-width: 900px;
         min-width: 200px;
+        display: flex;
+        flex-direction: column;
         @media (max-width: 768px) {
             font-size: 5vh;
+            margin-bottom: 0px;
+        }
+        @media screen and (min-device-width: 1100px) and (max-device-width: 1600px) { 
+            font-size: 7vh;
+        }
+        span{
+            font-size: 2vh;
+            font-style: italic;
+            color: #b5b3b3;
+            @media (max-width: 768px) {
+                font-size: 14px;
+            }
+        }
+        p{
+            font-size: 5vh;
+            font-weight: 200;
+            margin-top: 10px;
+            margin-bottom: 0px;
+            @media (max-width: 768px) {
+                font-size: 3vh;
+            }
         }
     }
+`;
+const Title = styled.div`
+    display: flex;
+    flex-direction: column;
+    
 `;
 
 const MovieContent = styled.div`
@@ -286,6 +334,7 @@ const SubTitles = styled.div`
     display: flex;
     align-items: center;
     flex-flow: row nowrap;
+    
 `;
 
 const SubTitle = styled.div`
@@ -298,8 +347,17 @@ const SubTitle = styled.div`
     }
 `;
 
+const DateCast = styled.div`
+    margin-right: 4px;
+    
+
+`;
+
 const Min = styled.div`
     padding-left: 4px;
+    @media (max-width: 768px) {
+        font-size: 12px;
+    }
 
 `;
 const Description = styled.div`
@@ -310,6 +368,10 @@ const Description = styled.div`
     @media (max-width: 768px) {
         font-size: 14px;
     }
+`;
+const Dot = styled.span`
+    margin-top: -18px;
+    font-size: 30px;
 `;
 
 export default MovieDetail;
